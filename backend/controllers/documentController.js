@@ -41,9 +41,20 @@ export const downloadFile = async (req, res, next) => {
         }
 
         const file = doc.file;
-        const filePath = path.join(__dirname, `../uploads${file}`);
-        res.download(filePath);
+        // const filePath = path.join(process.cwd(), `../uploads${file}`);
+        // const filePath = path.join(__dirname, '../uploads', file);
+        const filePath = path.join(process.cwd(), file);
 
+        //add download count
+        const updatedDoc = await Document.findByIdAndUpdate(id, {
+            downloadCount: doc.downloadCount + 1
+        });
+        //save the updated doc
+        await updatedDoc.save();
+        console.log(updatedDoc);
+
+
+        res.download(filePath);
 
     } catch (err) {
         next(err);
