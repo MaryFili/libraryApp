@@ -35,3 +35,14 @@ export const upload = multer({
     },
     fileFilter: fileFilter
 })
+
+// const multerUpload = multer({
+//     storage: storage,
+//     limits: {
+//         fileSize: 1024 * 1024 * 5,
+//     },
+//     fileFilter: fileFilter,
+// });
+
+// // Change this line to use `multer.array` instead of `multer.single`
+// export const upload = multerUpload.array("files", 10); // Allow up to 10 files to be uploaded

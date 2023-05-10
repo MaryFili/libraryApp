@@ -17,19 +17,38 @@ export const getAllDocuments = async (req, res, next) => {
     }
 }
 
+// export const addDocument = async (req, res, next) => {
+//     try {
+//         const { filename } = req.body;
+//         const file = req.file.path;
+//         const doc = await Document.create({ filename, file });
+//         res.status(201).json({
+//             message: 'Document added successfully',
+//             data: doc
+//         })
+//     } catch (err) {
+//         next(err)
+//     }
+// }
 export const addDocument = async (req, res, next) => {
     try {
-        const { filename } = req.body;
-        const file = req.file.path;
-        const doc = await Document.create({ filename, file });
+        const filename = req.body.filename
+        const files = req.files.map(file => file.path);
+
+        const docs = [];
+        for (let i = 0; i < files.length; i++) {
+            const doc = await Document.create({ filename: filename, file: files[i] });
+            docs.push(doc);
+        }
+
         res.status(201).json({
-            message: 'Document added successfully',
-            data: doc
-        })
+            message: 'Documents added successfully',
+            data: docs
+        });
     } catch (err) {
-        next(err)
+        next(err);
     }
-}
+};
 
 export const downloadFile = async (req, res, next) => {
     try {

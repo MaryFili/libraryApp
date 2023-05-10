@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.route('/')
     .get(getAllDocuments)
-    .post(upload.single('file'), addDocument);
+    .post(upload.array("files", 10), addDocument);
 
 router.route('/download/:id').get(downloadFile)
 
