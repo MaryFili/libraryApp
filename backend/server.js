@@ -3,6 +3,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
 import { connect } from './utils/db.js';
+import documentRoutes from './routes/documentRoutes.js';
+import { genericErrHandler, noRoute } from './middlewares/errorHandler.js';
 
 
 
@@ -11,16 +13,12 @@ process.NODE_ENV === 'production' ? dotenv.config() : dotenv.config({ path: './c
 
 dotenv.config();
 
-console.log(process.env.NODE_ENV);
+// console.log(process.env.NODE_ENV);
 //create app
 const app = express();
 //connect to DB
 connect()
-app.use(cors({
-    origin: 'http://localhost:3001',
-    credentials: true,
-    methods: ['GET', 'POST', 'PUT', "DELETE"]
-}));
+app.use(cors());
 
 
 
@@ -35,6 +33,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 
 //apply routers
+
+app.use('/documents', documentRoutes)
+
+//error handlers middlewares
+app.use(noRoute);
+app.use(genericErrHandler);
+
 
 
 const port = process.env.PORT;
