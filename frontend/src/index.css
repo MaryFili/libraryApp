@@ -4,18 +4,19 @@
   font-weight: 400;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
 
 body {
-  margin: 0;
+
   padding: 80px;
-  box-sizing: border-box;
-  color: #363c4d;
   display: flex;
   justify-content: center;
   min-width: 320px;
   min-height: 100vh;
-}
-
-p {
-  margin: 0;
 }

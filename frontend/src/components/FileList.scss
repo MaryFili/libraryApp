@@ -1,0 +1,63 @@
+h3 {
+    margin-top: 2em;
+    font-size: 2em;
+    ;
+}
+
+
+.listItemContainer {
+    min-width: 350px;
+    margin-top: 2em;
+    background: #e3eff3;
+    border-radius: 10px;
+    padding: 2em;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2em;
+    // align-items: center;
+
+    .fileContainer {
+        display: flex;
+        gap: 1em;
+        padding: 1em;
+        // justify-content: center;
+        align-items: center;
+
+        .fileIcon {
+            font-size: 30px;
+
+        }
+
+        h4 {
+            font-size: 1.3em;
+        }
+
+
+    }
+
+    .shareIcons {
+        display: flex;
+        gap: 2em;
+        padding: 1em;
+
+        .SendIcon {
+            font-size: 28px;
+            cursor: pointer;
+        }
+    }
+
+    .InfoContainer {
+        display: flex;
+        flex-direction: column;
+
+        p {
+            display: inline;
+            font-size: .8em;
+        }
+
+    }
+
+
+}

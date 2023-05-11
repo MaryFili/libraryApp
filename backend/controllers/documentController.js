@@ -70,7 +70,7 @@ export const downloadFile = async (req, res, next) => {
         //save the updated doc
         await updatedDoc.save();
         console.log(updatedDoc);
-
+        res.set('Access-Control-Expose-Headers', 'Content-Disposition')
 
         res.download(filePath);
 
