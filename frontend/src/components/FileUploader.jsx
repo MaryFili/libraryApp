@@ -6,7 +6,8 @@ import './FileUploader.scss';
 import axios from 'axios';
 
 export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey }) {
-
+    const [isUploading, setIsUploading] = useState(false);
+    const [fileNames, setFileNames] = useState([]);
     const fileChange = function (e) {
         // convert FileList to an array
         const fileList = Array.from(e.target.files);
@@ -27,7 +28,10 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
         }
 
         setDocs(fileList);
-        console.log(docs);
+
+        // Update the fileNames state with the names of the selected files
+        const names = fileList.map(file => file.name);
+        setFileNames(names);
 
     }
 
@@ -36,14 +40,9 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
         try {
 
-
+            setIsUploading(true);
             const fd = new FormData();
 
-
-            // docs.forEach(doc => {
-            //     fd.append(`files`, doc);
-
-            // });
 
 
             docs.forEach(doc => {
@@ -60,11 +59,13 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
                 }
             });
             setRefreshKey(refreshKey + 1)
+            setIsUploading(false);
 
 
 
         } catch (error) {
             console.error(error.response);
+            setIsUploading(false);
         }
 
 
@@ -88,15 +89,28 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
                 </div>
                 <button type="submit" value="Upload" className='upload-btn'>
-                    <i>
-                        <FontAwesomeIcon icon={faUpload} />
-
-                    </i>
-                    Upload</button>
+                    {isUploading ? (
+                        <div className="loader">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    ) : (
+                        <>
+                            <i>
+                                <FontAwesomeIcon icon={faUpload} />
+                            </i>
+                            Upload
+                        </>
+                    )}
+                </button>
 
             </form>
             <p className="main">Supported Files</p>
             <p className="fileInfo">.txt, .doc, .docx, .pdf, .jpg, .png, .xls, .xlsx</p>
+            <h2>Selected Files:</h2>
+            <p className="fileNames">{fileNames.join(', ')}</p>
         </div>
 
     )

@@ -13,7 +13,8 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
     const getAllDocs = async () => {
         try {
-            const response = await axios.get('https://librarybe.onrender.com/documents');
+            const response = await axios.get('http://localhost:5000/documents');
+            // const response = await axios.get('https://librarybe.onrender.com/documents');
             setUploadedDocs(response.data.data);
             console.log(response.data.data)
 
@@ -29,8 +30,12 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
     const downloadFile = async (id) => {
         try {
+            // const response = await axios.get(
+            //     `https://librarybe.onrender.com/documents/${id}`,
+            //     { responseType: 'blob' }
+            // );
             const response = await axios.get(
-                `https://librarybe.onrender.com/documents/${id}`,
+                `http://localhost:5000/documents/${id}`,
                 { responseType: 'blob' }
             );
             const blob = new Blob([response.data], { type: response.data.type });
@@ -71,10 +76,9 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                             <h4> {doc.file.split('/')[1]} </h4>
                         </div>
                         <div className='shareIcons'>
-                            <i> <FontAwesomeIcon className='SendIcon' onClick={() => downloadFile(doc._id)} icon={faDownload} /></i>
-                            <i> <FontAwesomeIcon className='SendIcon' icon={faShare} /></i>
+                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id)} icon={faDownload} /></i>
+                            <i> <FontAwesomeIcon className='sendIcon' icon={faShare} /></i>
                         </div>
-
 
                         <div className='Info Container'>
                             <p>Uploaded at {new Date(doc.createdAt).toDateString()}</p>
