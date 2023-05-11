@@ -13,7 +13,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
     const getAllDocs = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/documents');
+            const response = await axios.get('https://librarybe.onrender.com/documents');
             setUploadedDocs(response.data.data);
             console.log(response.data.data)
 
@@ -30,7 +30,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
     const downloadFile = async (id) => {
         try {
             const response = await axios.get(
-                `http://localhost:5000/documents/${id}`,
+                `https://librarybe.onrender.com/documents/${id}`,
                 { responseType: 'blob' }
             );
             const blob = new Blob([response.data], { type: response.data.type });
@@ -39,6 +39,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             console.log(response.headers)
             link.download = response.headers['content-disposition'].split('filename=')[1];
             link.click()
+            setRefreshKey(refreshKey + 1)
 
         } catch (err) {
             console.log(err)
