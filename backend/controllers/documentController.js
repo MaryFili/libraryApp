@@ -32,18 +32,18 @@ export const getAllDocuments = async (req, res, next) => {
 // }
 export const addDocument = async (req, res, next) => {
     try {
-        const filename = req.body.filename
+
         const files = req.files.map(file => file.path);
 
         const docs = [];
         for (let i = 0; i < files.length; i++) {
-            const doc = await Document.create({ filename: filename, file: files[i] });
+            const doc = await Document.create({ file: files[i] });
             docs.push(doc);
         }
 
         res.status(201).json({
             message: 'Documents added successfully',
-            data: docs
+            docs
         });
     } catch (err) {
         next(err);
@@ -60,8 +60,7 @@ export const downloadFile = async (req, res, next) => {
         }
 
         const file = doc.file;
-        // const filePath = path.join(process.cwd(), `../uploads${file}`);
-        // const filePath = path.join(__dirname, '../uploads', file);
+
         const filePath = path.join(process.cwd(), file);
 
         //add download count
@@ -75,6 +74,19 @@ export const downloadFile = async (req, res, next) => {
 
         res.download(filePath);
 
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const deleteDocument = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const deletedDoc = await Document.findByIdAndRemove(id);
+
+        res.status(200).json({
+            message: "Document deleted successfully",
+        })
     } catch (err) {
         next(err);
     }

@@ -1,12 +1,8 @@
 import mongoose from "mongoose";
 
 const documentSchema = new mongoose.Schema({
-    filename: {
-        type: String,
-        required: [true, "Please add a filename"],
-        trim: true,
-        maxlength: [20, "Filename cannot be more than 50 characters"],
-    },
+    name: String,
+
     file: {
         type: String,
         required: [true, "Please add a file"],
