@@ -37,7 +37,7 @@ export const addDocument = async (req, res, next) => {
 
         const docs = [];
         for (let i = 0; i < files.length; i++) {
-            const doc = await Document.create({ file: files[i] });
+            const doc = await Document.create({ name: files[i].name, file: files[i] });
             docs.push(doc);
         }
 

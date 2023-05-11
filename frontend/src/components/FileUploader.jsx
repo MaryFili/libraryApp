@@ -1,36 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAdd, faUpload } from '@fortawesome/free-solid-svg-icons';
 import './FileUploader.scss';
 import axios from 'axios';
 
+export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey }) {
 
-export default function FileUpload({ docs, setDocs, loading, removeDoc }) {
-
-    // const fileChange = function (e) {
-    //     setDocs(e.target.files[0]);
-    //     console.log(docs);
-    // }
     const fileChange = function (e) {
         // convert FileList to an array
         const fileList = Array.from(e.target.files);
+
+        // console.log('Selected files:', fileList);
+        const allowedFiles = ['pdf', 'txt', 'doc', 'docx', 'xlsx', 'xls', 'jpg', 'jpeg', 'png'];
+
+        let foundInvalidFiles = false;
+        fileList.forEach(doc => {
+            console.log(doc.name.split('.')[1]);
+            console.log(allowedFiles.includes(doc.name.split('.')[1]));
+            if (!allowedFiles.includes(doc.name.split('.')[1])) {
+                foundInvalidFiles = true;
+            }
+        })
+        if (foundInvalidFiles) {
+            alert('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
+        }
+
         setDocs(fileList);
-        console.log('Selected files:', fileList);
+        console.log(docs);
+
     }
 
     const submitHandler = async function (e) {
         e.preventDefault();
 
         try {
-            // const fd = new FormData();
-            // fd.append('name', docs.name);
-            // fd.append('files', docs)
-            const fd = new FormData();
-            fd.append('name', docs[0].name);
-            docs.forEach((doc, index) => {
-                fd.append(`files`, doc);
-            });
 
+
+            const fd = new FormData();
+
+
+            // docs.forEach(doc => {
+            //     fd.append(`files`, doc);
+
+            // });
+
+
+            docs.forEach(doc => {
+                fd.append(`files`, doc, doc.name);
+
+            });
 
             const response = await axios({
                 method: 'POST',
@@ -40,8 +59,8 @@ export default function FileUpload({ docs, setDocs, loading, removeDoc }) {
                     'Content-Type': "multipart/form-data"
                 }
             });
+            setRefreshKey(refreshKey + 1)
 
-            console.log(response);
 
 
         } catch (error) {
@@ -50,6 +69,7 @@ export default function FileUpload({ docs, setDocs, loading, removeDoc }) {
 
 
     }
+
 
 
 
@@ -80,4 +100,16 @@ export default function FileUpload({ docs, setDocs, loading, removeDoc }) {
         </div>
 
     )
+
 }
+
+
+FileUpload.propTypes = {
+    docs: PropTypes.array.isRequired,
+    setDocs: PropTypes.func.isRequired,
+    refreshKey: PropTypes.number.isRequired,
+    setRefreshKey: PropTypes.func.isRequired
+
+
+
+};
