@@ -1,0 +1,52 @@
+h3 {
+  margin-top: 2em;
+  font-size: 2em;
+}
+
+.listItemContainer {
+  min-width: 350px;
+  margin-top: 2em;
+  background: #e3eff3;
+  width: 100%;
+  padding: 2em;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2em;
+  border-radius: 15px;
+  box-shadow: -5px -5px 17px #d7d7d7, 5px 5px 17px #e9e9e9;
+}
+.listItemContainer .shareIcons {
+  display: flex;
+  gap: 3em;
+  padding: 1em;
+}
+.listItemContainer .shareIcons i {
+  font-size: 23px;
+  cursor: pointer;
+  color: black;
+}
+.listItemContainer .fileContainer {
+  display: flex;
+  gap: 1em;
+  padding: 1em;
+  align-items: center;
+}
+.listItemContainer .fileContainer .fileIcon {
+  font-size: 30px;
+  color: #35b8b1;
+}
+.listItemContainer .fileContainer h4 {
+  font-size: 1.3em;
+  color: #212427;
+}
+.listItemContainer .InfoContainer {
+  display: flex;
+  flex-direction: column;
+}
+.listItemContainer .InfoContainer p {
+  display: inline;
+  font-size: 0.8em;
+  color: #212427;
+}/*# sourceMappingURL=FileList.css.map */

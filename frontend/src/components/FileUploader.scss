@@ -166,4 +166,15 @@
             transform: translate(19px, 0);
         }
     }
+
+    .errorMessage {
+        color: red;
+    }
+
+    .filesSelected {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
 }

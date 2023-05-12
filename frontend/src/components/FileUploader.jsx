@@ -8,31 +8,38 @@ import axios from 'axios';
 export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey }) {
     const [isUploading, setIsUploading] = useState(false);
     const [fileNames, setFileNames] = useState([]);
+    const [errorMessage, setErrorMessage] = useState('')
     const fileChange = function (e) {
-        // convert FileList to an array
-        const fileList = Array.from(e.target.files);
+        try {
+            // convert FileList to an array
+            const fileList = Array.from(e.target.files);
 
-        // console.log('Selected files:', fileList);
-        const allowedFiles = ['pdf', 'txt', 'doc', 'docx', 'xlsx', 'xls', 'jpg', 'jpeg', 'png'];
+            // console.log('Selected files:', fileList);
+            const allowedFiles = ['pdf', 'txt', 'doc', 'docx', 'xlsx', 'xls', 'jpg', 'jpeg', 'png'];
 
-        let foundInvalidFiles = false;
-        fileList.forEach(doc => {
-            // console.log(doc.name.split('.')[1]);
-            // console.log(allowedFiles.includes(doc.name.split('.')[1]));
-            if (!allowedFiles.includes(doc.name.split('.')[1])) {
-                foundInvalidFiles = true;
+            let foundInvalidFiles = false;
+            fileList.forEach(doc => {
+                // console.log(doc.name.split('.')[1]);
+                // console.log(allowedFiles.includes(doc.name.split('.')[1]));
+                if (!allowedFiles.includes(doc.name.split('.')[1])) {
+                    foundInvalidFiles = true;
+                }
+            })
+            if (foundInvalidFiles) {
+                throw new Error('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
+                // alert('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
             }
-        })
-        if (foundInvalidFiles) {
-            alert('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
+
+            setDocs(fileList);
+
+            // Update the fileNames state with the names of the selected files
+            const names = fileList.map(file => file.name);
+            setFileNames(names);
+        } catch (err) {
+            setErrorMessage(err.message)
+            console.log(errorMessage);
+
         }
-
-        setDocs(fileList);
-
-        // Update the fileNames state with the names of the selected files
-        const names = fileList.map(file => file.name);
-        setFileNames(names);
-
     }
 
     const submitHandler = async function (e) {
@@ -43,11 +50,8 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             setIsUploading(true);
             const fd = new FormData();
 
-
-
             docs.forEach(doc => {
                 fd.append(`files`, doc, doc.name);
-
             });
 
             const response = await axios({
@@ -58,22 +62,15 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
                     'Content-Type': "multipart/form-data"
                 }
             });
+
             setRefreshKey(refreshKey + 1)
             setIsUploading(false);
-
-
 
         } catch (error) {
             console.error(error.response);
             setIsUploading(false);
         }
-
-
     }
-
-
-
-
 
 
     return (
@@ -108,8 +105,12 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             </form>
             <p className="main">Supported Files</p>
             <p className="fileInfo">.txt, .doc, .docx, .pdf, .jpg, .png, .xls, .xlsx</p>
-            <h2>Selected Files:</h2>
-            <p className="fileNames">{fileNames.join(', ')}</p>
+            {errorMessage && <p className='errorMessage'>{errorMessage}</p>}
+            {fileNames.length > 0 && <div className='filesSelected'>
+                <h2>Selected Files:</h2>
+                <p className="fileNames">{fileNames.join(', ')}</p>
+            </div>}
+
         </div>
 
     )

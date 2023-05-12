@@ -42,7 +42,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             const blob = new Blob([response.data], { type: response.data.type });
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            console.log(link.href)
+
             link.download = response.headers['content-disposition'].split('filename=')[1];
             link.click()
             setRefreshKey(refreshKey + 1)
