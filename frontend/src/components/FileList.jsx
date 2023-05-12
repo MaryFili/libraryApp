@@ -10,13 +10,14 @@ import { saveAs } from 'file-saver';
 export default function FileList({ refreshKey, setRefreshKey }) {
 
     const [uploadedDocs, setUploadedDocs] = useState([]);
+    const [fileLink, setFileLink] = useState('');
 
     const getAllDocs = async () => {
         try {
             const response = await axios.get('http://localhost:5000/documents');
             // const response = await axios.get('https://librarybe.onrender.com/documents');
             setUploadedDocs(response.data.data);
-            console.log(response.data.data)
+
 
         } catch (err) {
             console.log(err)
@@ -41,7 +42,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             const blob = new Blob([response.data], { type: response.data.type });
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            console.log(response.headers)
+            console.log(link.href)
             link.download = response.headers['content-disposition'].split('filename=')[1];
             link.click()
             setRefreshKey(refreshKey + 1)
@@ -50,7 +51,9 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             console.log(err)
         }
     }
-
+    const getFileLink = (id) => {
+        setFileLink(`http://localhost:5000/documents/${id}`);
+    }
 
     return (
 
@@ -77,20 +80,20 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                         </div>
                         <div className='shareIcons'>
                             <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id)} icon={faDownload} /></i>
-                            <i> <FontAwesomeIcon className='sendIcon' icon={faShare} /></i>
+                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => getFileLink(doc._id)} icon={faShare} /></i>
                         </div>
 
                         <div className='Info Container'>
                             <p>Uploaded at {new Date(doc.createdAt).toDateString()}</p>
                             <p>Downloads: {doc.downloadCount}</p>
-
+                            {fileLink && <p>Your file is available <a href={fileLink}>here</a></p>}
 
                         </div>
 
 
                     </li>
                 ))}
-            </ul>
+            </ul >
 
         </>
     )

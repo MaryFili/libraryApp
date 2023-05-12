@@ -17,8 +17,8 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
         let foundInvalidFiles = false;
         fileList.forEach(doc => {
-            console.log(doc.name.split('.')[1]);
-            console.log(allowedFiles.includes(doc.name.split('.')[1]));
+            // console.log(doc.name.split('.')[1]);
+            // console.log(allowedFiles.includes(doc.name.split('.')[1]));
             if (!allowedFiles.includes(doc.name.split('.')[1])) {
                 foundInvalidFiles = true;
             }
@@ -105,7 +105,6 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
                         </>
                     )}
                 </button>
-
             </form>
             <p className="main">Supported Files</p>
             <p className="fileInfo">.txt, .doc, .docx, .pdf, .jpg, .png, .xls, .xlsx</p>

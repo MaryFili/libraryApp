@@ -37,9 +37,10 @@ export const addDocument = async (req, res, next) => {
 
         const docs = [];
         for (let i = 0; i < files.length; i++) {
-            const doc = await Document.create({ name: files[i].name, file: files[i] });
+            const doc = await Document.create({ path: files[i], name: files[i].name, file: files[i] });
+            console.log(doc);
             docs.push(doc);
-        }
+        };
 
         res.status(201).json({
             message: 'Documents added successfully',
@@ -69,7 +70,7 @@ export const downloadFile = async (req, res, next) => {
         });
         //save the updated doc
         await updatedDoc.save();
-        console.log(updatedDoc);
+
         res.set('Access-Control-Expose-Headers', 'Content-Disposition')
 
         res.download(filePath);
