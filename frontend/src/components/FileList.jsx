@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileExcel, faFileImage, faFilePdf, faFileText, faFileWord, faShare } from '@fortawesome/free-solid-svg-icons';
-import { saveAs } from 'file-saver';
+import { Document, Page, pdfjs } from 'react-pdf';
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 export default function FileList({ refreshKey, setRefreshKey }) {
 
@@ -79,7 +80,26 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                     <li className='listItemContainer' key={doc._id}>
                         <div className='fileContainer'>
                             {doc.file.split('.')[1] === 'pdf' ? (
-                                <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
+                                <div>
+                                    <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
+
+                                    <Document file={`http://localhost:5000/documents/${doc._id}`}>
+                                        <Page
+                                            key={`page_${1}`}
+                                            pageNumber={1}
+                                            width={375}
+                                            loading="Loading Page..."
+                                            renderAnnotationLayer={true}
+                                            renderTextLayer={false}
+                                            externalLinkTarget="_blank"
+                                            pageNumber={1} />
+                                    </Document>
+
+
+
+                                </div>
+
+
                             ) : doc.file.split('.')[1] === 'doc' || doc.file.split('.')[1] === 'docx' ? (
                                 <FontAwesomeIcon className='fileIcon' icon={faFileWord} />
                             ) : doc.file.split('.')[1] === 'txt' ? (
@@ -87,7 +107,16 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                             ) : doc.file.split('.')[1] === 'xlsx' || doc.file.split('.')[1] === 'xls' ? (
                                 <FontAwesomeIcon className='fileIcon' icon={faFileExcel} />
                             ) : doc.file.split('.')[1] === 'jpg' || doc.file.split('.')[1] === 'jpeg' || doc.file.split('.')[1] === 'png' ? (
-                                <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
+                                <div>
+                                    <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
+
+                                    <img
+                                        className='fileIcon'
+                                        src={`http://localhost:5000/documents/${doc._id}`}
+                                        alt='Preview'
+                                        style={{ maxHeight: '50px', maxWidth: '50px' }}
+                                    />;
+                                </div>
                             ) : null}
 
                             <h4> {doc.file.split('/')[1]} </h4>
