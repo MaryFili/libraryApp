@@ -51,9 +51,23 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             console.log(err)
         }
     }
-    const getFileLink = (id) => {
-        setFileLink(`http://localhost:5000/documents/${id}`);
-    }
+
+
+    const getFileLink = (id, expiresInMinutes) => {
+        const url = `http://localhost:5000/documents/${id}`;
+
+        //the link will be visible only for the specified amount of minutes
+        const expirationTime = new Date(Date.now() + expiresInMinutes * 60 * 1000);
+        setFileLink(url);
+
+        const linkExpirationTimer = setTimeout(() => {
+            setFileLink('');
+        }, expiresInMinutes * 60 * 1000);
+
+        return linkExpirationTimer;
+    };
+
+
 
     return (
 
@@ -80,7 +94,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                         </div>
                         <div className='shareIcons'>
                             <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id)} icon={faDownload} /></i>
-                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => getFileLink(doc._id)} icon={faShare} /></i>
+                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => getFileLink(doc._id, 1)} icon={faShare} /></i>
                         </div>
 
                         <div className='Info Container'>
