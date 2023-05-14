@@ -19,15 +19,15 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
             let foundInvalidFiles = false;
             fileList.forEach(doc => {
-                // console.log(doc.name.split('.')[1]);
-                // console.log(allowedFiles.includes(doc.name.split('.')[1]));
+
                 if (!allowedFiles.includes(doc.name.split('.')[1])) {
                     foundInvalidFiles = true;
                 }
+
             })
             if (foundInvalidFiles) {
                 throw new Error('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
-                // alert('Invalid file type. Only pdf, doc, docx, xlsx, xls, jpg, jpeg, png are allowed');
+
             }
 
             setDocs(fileList);
@@ -51,12 +51,13 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             const fd = new FormData();
 
             docs.forEach(doc => {
-                fd.append(`files`, doc, doc.name);
+                fd.append(`files`, doc, doc.name.replaceAll(' ', '_'));
             });
 
             const response = await axios({
                 method: 'POST',
-                url: 'http://localhost:5000/documents',
+                // url: 'http://localhost:5000/documents',
+                url: 'https://librarybe.onrender.com/documents',
                 data: fd,
                 headers: {
                     'Content-Type': "multipart/form-data"
@@ -65,6 +66,7 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
             setRefreshKey(refreshKey + 1)
             setIsUploading(false);
+            setFileNames('')
 
         } catch (error) {
             console.error(error.response);
