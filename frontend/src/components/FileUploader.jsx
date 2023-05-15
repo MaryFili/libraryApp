@@ -10,6 +10,8 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
     const [fileNames, setFileNames] = useState([]);
     const [errorMessage, setErrorMessage] = useState('')
     const fileChange = function (e) {
+        setErrorMessage('');
+
         try {
             // convert FileList to an array
             const fileList = Array.from(e.target.files);
@@ -51,7 +53,7 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             const fd = new FormData();
 
             docs.forEach(doc => {
-                fd.append(`files`, doc, doc.name.replaceAll(' ', '_'));
+                fd.append(`files`, doc, doc.name);
             });
 
             const response = await axios({

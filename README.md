@@ -27,10 +27,3 @@ Code and other assets access - zip archive, github / gitlab repository or any ot
 Instructions how to run & test the application
 Description of main architecture and design decisions
 Ideas and proposals how to improve the application from a user or technical perspective
-Next Steps 
-Send the challenge to seal@heinekamp.com /upakov@heinekamp.com 
-
-
-Give us 2-3 days to review your challenge. 
-
-

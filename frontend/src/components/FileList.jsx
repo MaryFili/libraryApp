@@ -15,7 +15,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
     const [uploadedDocs, setUploadedDocs] = useState([]);
     const [fileLink, setFileLink] = useState('');
-    const [modal, setModal] = useState(false);
+
 
 
 
@@ -53,8 +53,17 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
 
-            link.download = response.headers['content-disposition'].split('filename=')[1];
+            let filename = response.headers['content-disposition'].split('filename=')[1];
+            //removes any quotes around the filename and any whitespace or slashes
+            filename = filename.replace(/^"+|"+$/g, '').replace(/[\s/\\]/g, '');
+            //decodes any URL-encoded characters in the filename
+            link.download = decodeURIComponent(filename);
+
             link.click()
+
+            const downloadCount = response.data.downloadCount;
+            await axios.patch(`/files/${id}`, { downloadCount: downloadCount + 1 });
+
             setRefreshKey(refreshKey + 1)
 
         } catch (err) {
@@ -91,48 +100,52 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                     <li className='listItemContainer' key={doc._id}>
                         <div className='fileContainer'>
                             {doc.file.split('.')[1] === 'pdf' ? (
-                                <div>
-                                    <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
-
-                                    {/* <Document file={`http://localhost:5000/documents/${doc._id}`}>
+                                <div className='previewContainer'>
+                                    <Document file={`http://localhost:5000/documents/${doc._id}`}>
                                         <Page
                                             key={`page_${1}`}
                                             pageNumber={1}
-                                            width={375}
+                                            width={350}
                                             loading="Loading Page..."
                                             renderAnnotationLayer={true}
                                             renderTextLayer={false}
                                             externalLinkTarget="_blank"
                                         />
-                                    </Document> */}
-
-
-
+                                    </Document>
+                                    <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
                                 </div>
 
 
                             ) : doc.file.split('.')[1] === 'doc' || doc.file.split('.')[1] === 'docx' ? (
-                                <FontAwesomeIcon className='fileIcon' icon={faFileWord} />
+
+                                <div className='previewContainer'>
+                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=https://librarybe.onrender.com/documents/${doc._id}`} width={'350px'} height={'350px'} ></iframe>
+                                    <FontAwesomeIcon className='fileIcon' icon={faFileWord} />
+                                </div>
+
                             ) : doc.file.split('.')[1] === 'txt' ? (
                                 <FontAwesomeIcon className='fileIcon' icon={faFileText} />
+
                             ) : doc.file.split('.')[1] === 'xlsx' || doc.file.split('.')[1] === 'xls' ? (
-                                <div>
+
+                                <div className='previewContainer'>
+                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=https://librarybe.onrender.com/documents/${doc._id}`} width={'350px'} height={'350px'} ></iframe>
                                     <FontAwesomeIcon className='fileIcon' icon={faFileExcel} />
-
-                                    {/* <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=https://librarybe.onrender.com/documents/${doc._id}`} width={'500px'} height={'500px'} ></iframe> */}
-
                                 </div>
+
                             ) : doc.file.split('.')[1] === 'jpg' || doc.file.split('.')[1] === 'jpeg' || doc.file.split('.')[1] === 'png' ? (
-                                <div>
-                                    <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
 
-                                    {/* <img
+                                <div className='previewContainer'>
+                                    <img
                                         className='fileIcon'
-                                        src={`http://localhost:5000/documents/${doc._id}`}
+                                        src={`https://librarybe.onrender.com/documents/${doc._id}`}
                                         alt='Preview'
-                                        style={{ maxHeight: '50px', maxWidth: '50px' }}
-                                    /> */}
+                                        style={{ maxHeight: '350px', maxWidth: '350px' }}
+                                    />
+
+                                    <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
                                 </div>
+
                             ) : null}
 
                             <h4> {doc.file.split('/')[1]} </h4>
@@ -146,29 +159,10 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                             <p>Uploaded at {new Date(doc.createdAt).toDateString()}</p>
                             <p>Downloads: {doc.downloadCount}</p>
                             {fileLink && <p>Your file is available <a href={fileLink}>here</a></p>}
-                            <p>Preview available <a href={'#'} onClick={() => isModalActive(true)}>here</a></p>
-
                         </div>
-                        {modal &&
-                            (
-                                <div className='modalBackground'>
-                                    <div className='modalContainer'>
-                                        <div className='modalCloseBtn'> <button onClick={() => setModal(false)}>X</button>
-                                        </div>
-
-                                        <DocViewer documents={[{ uri: `https://librarybe.onrender.com/documents/${doc._id}` }]} pluginRenderers={DocViewerRenderers} style={{ width: 500, height: 500 }} />
-                                    </div>
-                                </div>
-
-
-                            )}
-
-
-
                     </li>
                 ))}
             </ul >
-
         </>
     )
 }

@@ -64,10 +64,7 @@ export const downloadFile = async (req, res, next) => {
 
         const filePath = path.join(process.cwd(), file);
 
-        //add download count
-        const updatedDoc = await Document.findByIdAndUpdate(id, {
-            downloadCount: doc.downloadCount + 1
-        });
+
         //save the updated doc
         await updatedDoc.save();
 
@@ -92,3 +89,27 @@ export const deleteDocument = async (req, res, next) => {
         next(err);
     }
 }
+
+
+export const updateDownloadCount = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const doc = await Document.findById(id);
+        if (!doc) {
+            throw new Error('Document not found');
+        }
+
+        const updatedDoc = await Document.findByIdAndUpdate(
+            id,
+            { downloadCount: doc.downloadCount + 1 },
+            { new: true } // return the updated document
+        );
+
+        res.status(200).json({
+            message: 'Download count updated successfully',
+            data: updatedDoc,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
