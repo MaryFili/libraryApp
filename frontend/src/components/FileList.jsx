@@ -17,16 +17,11 @@ export default function FileList({ refreshKey, setRefreshKey }) {
     const [fileLink, setFileLink] = useState('');
 
 
-
-
     const getAllDocs = async () => {
         try {
             const response = await axios.get('http://localhost:5000/documents');
-
             // const response = await axios.get('https://librarybe.onrender.com/documents');
             setUploadedDocs(response.data.data);
-
-
         } catch (err) {
             console.log(err)
         }
@@ -48,6 +43,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                 `http://localhost:5000/documents/${id}`,
                 { responseType: 'blob' }
             );
+
             const blob = new Blob([response.data], { type: response.data.type });
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -59,12 +55,8 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             link.download = decodeURIComponent(filename);
             link.click()
 
-
             await axios.patch(`http://localhost:5000/documents/${id}`, { downloadCount: downloadCount + 1 });
             setRefreshKey(refreshKey + 1);
-
-
-
 
         } catch (err) {
             console.log(err)
@@ -92,7 +84,6 @@ export default function FileList({ refreshKey, setRefreshKey }) {
     return (
 
         <>
-
             <h3>Uploaded Files</h3>
             <ul>
                 {uploadedDocs && uploadedDocs.map(doc => (
@@ -105,7 +96,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                                         <Page
                                             key={`page_${1}`}
                                             pageNumber={1}
-                                            width={375}
+                                            width={350}
                                             loading="Loading Page..."
                                             renderAnnotationLayer={false}
                                             renderTextLayer={false}
@@ -113,9 +104,6 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                                         />
                                     </Document>
                                     <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
-
-
-
                                 </div>
 
 
@@ -136,8 +124,6 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                                 <div className='previewContainer'>
                                     <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=http://localhost:5000/documents/${doc._id}`} width={'350px'} height={'500px'} ></iframe>
                                     <FontAwesomeIcon className='fileIcon' icon={faFileExcel} />
-
-
                                 </div>
 
                             ) : doc.file.split('.')[1] === 'jpg' || doc.file.split('.')[1] === 'jpeg' || doc.file.split('.')[1] === 'png' ? (
@@ -149,8 +135,8 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                                         style={{ maxHeight: '350px', maxWidth: '350px' }}
                                     />
                                     <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
-
                                 </div>
+
                             ) : null}
                             <h4> {doc.file.split('/')[1]} </h4>
                         </div>
@@ -167,8 +153,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                         </div>
                     </li>
                 ))}
-            </ul >
-
+            </ul>
         </>
     )
 }
