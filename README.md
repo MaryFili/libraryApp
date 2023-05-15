@@ -1,29 +1,66 @@
-#Overview
 
-The application is a document library intended to give its users a web based solution to store and share their documents with others.
-Code challenge timebox is 4 hours. There is no deadline for the challenge. 
-All the following requirements are what we provide. Make your assumptions when needed.
-Functional Requirements
-Design and implement the application’s UI / API based on the requirements:
-available document types for uploading 
-- PDF / Excel / Word/ txt/ pictures documents
-display / get a list of available documents:
-- name of the document
-- icon based on its type
-- a preview image of its content 1st page content
- - date and time of upload
-- number of downloads
+# Share & Store
 
-download / upload a document
-download / upload several documents
-a document can be shared with other users via a generated link which is publicly available for the specified time period (e.g.: 1 hour, 1 day, etc.)
+This web app allows users to upload and download files to a server The user will be able to generate a link to download the file, see a preview of the file, get the date in which the file has been updated and the number of time the file has been downloaded. 
 
-Non-Functional Requirements
-Desired frontend framework is React. But any other can be used as well.
-Desired backend framework is ASP NET Core. But any other can be used as well. 
-Any 3rd party library or framework can be used. If a license or key is required for running the application it has to be provided.
-Deliverables
-Code and other assets access - zip archive, github / gitlab repository or any other comfortable for you way 
-Instructions how to run & test the application
-Description of main architecture and design decisions
-Ideas and proposals how to improve the application from a user or technical perspective
+## Features
+
+- Uploading multiple files at the same time
+- File Preview
+- Allowed file types: PDF, doc, docx, xls, xlsx, jpg, jpeg, png, txt
+
+
+## Features to be implemented
+
+- User authentication
+- Remote file storage on the cloud
+- Deploy the app
+
+
+## Tech Stack
+
+**Client:** React, Scss
+
+**Server:** Node, Express, MongoDB
+
+
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone https://link-to-project
+```
+
+Go to the backend and frontend directory of the project, install dependencies both on the backend and frontend directories and start the server
+
+```bash
+  cd my-project/backend
+  npm install
+  npm run start
+```
+
+```bash
+  cd my-project/frontend
+  npm install
+  npm run dev
+```
+
+
+Click on the link at "Local:" to access the webapp
+
+```bash
+  > frontend@0.0.0 dev
+> vite
+
+
+  VITE v4.3.5  ready in 373 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h to show help
+```
+## Author
+
+[mary filardi](https://www.github.com/MaryFili)

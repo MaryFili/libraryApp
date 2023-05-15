@@ -88,7 +88,7 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
                 </div>
                 {fileNames.length > 0 && <div className='filesSelected'>
-                    <h2>Selected Files:</h2>
+                    {/* <h2>Selected Files:</h2> */}
                     <p className="fileNames">{fileNames.join(', ')}</p>
                 </div>}
                 <button type="submit" value="Upload" className='upload-btn'>
