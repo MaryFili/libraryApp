@@ -30,7 +30,7 @@ yarn-error.log*
 
 /backend/config/
 /frontend/src/config/
-backend/uploads
+
 
 
 # dependencies
@@ -59,7 +59,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-/backend/uploads/
+
 /backend/config/
 /frontend/src/config/
 

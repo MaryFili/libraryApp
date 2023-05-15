@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faDownload, faFileExcel, faFileImage, faFilePdf, faFileText, faFileWord, faShare } from '@fortawesome/free-solid-svg-icons';
 import { Document, Page, pdfjs } from 'react-pdf';
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
+
 
 
 
@@ -19,12 +19,11 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
 
 
-
     const getAllDocs = async () => {
         try {
-            // const response = await axios.get('http://localhost:5000/documents');
+            const response = await axios.get('http://localhost:5000/documents');
 
-            const response = await axios.get('https://librarybe.onrender.com/documents');
+            // const response = await axios.get('https://librarybe.onrender.com/documents');
             setUploadedDocs(response.data.data);
 
 
@@ -38,17 +37,17 @@ export default function FileList({ refreshKey, setRefreshKey }) {
     }, [refreshKey])
 
 
-    const downloadFile = async (id) => {
+    const downloadFile = async (id, downloadCount) => {
         try {
-            const response = await axios.get(
-                `https://librarybe.onrender.com/documents/${id}`,
-                { responseType: 'blob' }
-            );
-
             // const response = await axios.get(
-            //     `http://localhost:5000/documents/${id}`,
+            //     `https://librarybe.onrender.com/documents/${id}`,
             //     { responseType: 'blob' }
             // );
+
+            const response = await axios.get(
+                `http://localhost:5000/documents/${id}`,
+                { responseType: 'blob' }
+            );
             const blob = new Blob([response.data], { type: response.data.type });
             const link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
@@ -58,13 +57,14 @@ export default function FileList({ refreshKey, setRefreshKey }) {
             filename = filename.replace(/^"+|"+$/g, '').replace(/[\s/\\]/g, '');
             //decodes any URL-encoded characters in the filename
             link.download = decodeURIComponent(filename);
-
             link.click()
 
-            const downloadCount = response.data.downloadCount;
-            await axios.patch(`/files/${id}`, { downloadCount: downloadCount + 1 });
 
-            setRefreshKey(refreshKey + 1)
+            await axios.patch(`http://localhost:5000/documents/${id}`, { downloadCount: downloadCount + 1 });
+            setRefreshKey(refreshKey + 1);
+
+
+
 
         } catch (err) {
             console.log(err)
@@ -73,12 +73,11 @@ export default function FileList({ refreshKey, setRefreshKey }) {
 
 
     const getFileLink = (id, expiresInMinutes) => {
-        // const url = `http://localhost:5000/documents/${id}`;
-        const url = `https://librarybe.onrender.com/documents/${id}`;
+        const url = `http://localhost:5000/documents/${id}`;
+        // const url = `https://librarybe.onrender.com/documents/${id}`;
 
 
         //the link will be visible only for the specified amount of minutes
-        const expirationTime = new Date(Date.now() + expiresInMinutes * 60 * 1000);
         setFileLink(url);
 
         const linkExpirationTimer = setTimeout(() => {
@@ -101,68 +100,75 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                         <div className='fileContainer'>
                             {doc.file.split('.')[1] === 'pdf' ? (
                                 <div className='previewContainer'>
+
                                     <Document file={`http://localhost:5000/documents/${doc._id}`}>
                                         <Page
                                             key={`page_${1}`}
                                             pageNumber={1}
-                                            width={350}
+                                            width={375}
                                             loading="Loading Page..."
-                                            renderAnnotationLayer={true}
+                                            renderAnnotationLayer={false}
                                             renderTextLayer={false}
                                             externalLinkTarget="_blank"
                                         />
                                     </Document>
                                     <FontAwesomeIcon className='fileIcon' icon={faFilePdf} />
+
+
+
                                 </div>
 
 
                             ) : doc.file.split('.')[1] === 'doc' || doc.file.split('.')[1] === 'docx' ? (
-
                                 <div className='previewContainer'>
-                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=https://librarybe.onrender.com/documents/${doc._id}`} width={'350px'} height={'350px'} ></iframe>
+                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=http://localhost:5000/documents/${doc._id}`} width={'350px'} height={'500px'} ></iframe>
                                     <FontAwesomeIcon className='fileIcon' icon={faFileWord} />
                                 </div>
 
                             ) : doc.file.split('.')[1] === 'txt' ? (
-                                <FontAwesomeIcon className='fileIcon' icon={faFileText} />
+                                <div className='previewContainer'>
+                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=http://localhost:5000/documents/${doc._id}`} width={'350px'} height={'500px'} ></iframe>
+                                    <FontAwesomeIcon className='fileIcon' icon={faFileText} />
+                                </div>
+
 
                             ) : doc.file.split('.')[1] === 'xlsx' || doc.file.split('.')[1] === 'xls' ? (
-
                                 <div className='previewContainer'>
-                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=https://librarybe.onrender.com/documents/${doc._id}`} width={'350px'} height={'350px'} ></iframe>
+                                    <iframe src={`https://view.officeapps.live.com/op/embed.aspx?src=http://localhost:5000/documents/${doc._id}`} width={'350px'} height={'500px'} ></iframe>
                                     <FontAwesomeIcon className='fileIcon' icon={faFileExcel} />
+
+
                                 </div>
 
                             ) : doc.file.split('.')[1] === 'jpg' || doc.file.split('.')[1] === 'jpeg' || doc.file.split('.')[1] === 'png' ? (
-
                                 <div className='previewContainer'>
                                     <img
                                         className='fileIcon'
-                                        src={`https://librarybe.onrender.com/documents/${doc._id}`}
+                                        src={`http://localhost:5000/documents/${doc._id}`}
                                         alt='Preview'
                                         style={{ maxHeight: '350px', maxWidth: '350px' }}
                                     />
-
                                     <FontAwesomeIcon className='fileIcon' icon={faFileImage} />
+
                                 </div>
-
                             ) : null}
-
                             <h4> {doc.file.split('/')[1]} </h4>
                         </div>
+
                         <div className='shareIcons'>
-                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id)} icon={faDownload} /></i>
+                            <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id, doc.downloadCount)} icon={faDownload} /></i>
                             <i> <FontAwesomeIcon className='sendIcon' onClick={() => getFileLink(doc._id, 1)} icon={faShare} /></i>
                         </div>
 
                         <div className='Info Container'>
                             <p>Uploaded at {new Date(doc.createdAt).toDateString()}</p>
                             <p>Downloads: {doc.downloadCount}</p>
-                            {fileLink && <p>Your file is available <a href={fileLink}>here</a></p>}
+                            {fileLink && <p>Your file is available at the following address: <a href={fileLink}>{fileLink}</a></p>}
                         </div>
                     </li>
                 ))}
             </ul >
+
         </>
     )
 }

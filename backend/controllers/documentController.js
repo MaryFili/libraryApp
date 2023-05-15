@@ -1,4 +1,5 @@
 import Document from '../models/documentSchema.js';
+import createError from 'http-errors';
 import path from 'path';
 
 
@@ -57,16 +58,19 @@ export const downloadFile = async (req, res, next) => {
         const doc = await Document.findById(id);
         //if the doc doesn't exist throw an error and stops execution
         if (!doc) {
-            throw new Error('Document not found');
+            throw createError.NotFound('Document not found');
         }
 
         const file = doc.file;
 
         const filePath = path.join(process.cwd(), file);
 
-
-        //save the updated doc
-        await updatedDoc.save();
+        //add download count
+        // const updatedDoc = await Document.findByIdAndUpdate(id, {
+        //     downloadCount: doc.downloadCount + 1
+        // });
+        // //save the updated doc
+        // await updatedDoc.save();
 
         res.set('Access-Control-Expose-Headers', 'Content-Disposition')
 
@@ -80,6 +84,11 @@ export const downloadFile = async (req, res, next) => {
 export const deleteDocument = async (req, res, next) => {
     try {
         const { id } = req.params;
+        const doc = await Document.findById(id);
+        //if the doc doesn't exist throw an error and stops execution
+        if (!doc) {
+            throw createError.NotFound('Document not found');
+        }
         const deletedDoc = await Document.findByIdAndRemove(id);
 
         res.status(200).json({
@@ -90,18 +99,19 @@ export const deleteDocument = async (req, res, next) => {
     }
 }
 
-
-export const updateDownloadCount = async (req, res, next) => {
+//update document properties
+export const updateDocument = async (req, res, next) => {
     try {
         const { id } = req.params;
         const doc = await Document.findById(id);
+        //if the doc doesn't exist throw an error and stops execution
         if (!doc) {
-            throw new Error('Document not found');
+            throw createError.NotFound('Document not found');
         }
 
         const updatedDoc = await Document.findByIdAndUpdate(
             id,
-            { downloadCount: doc.downloadCount + 1 },
+            { ...req.body },
             { new: true } // return the updated document
         );
 

@@ -1,6 +1,6 @@
 import express from 'express';
 import { upload } from '../middlewares/multer.js';
-import { addDocument, deleteDocument, downloadFile, getAllDocuments } from '../controllers/documentController.js';
+import { addDocument, deleteDocument, downloadFile, getAllDocuments, updateDocument } from '../controllers/documentController.js';
 
 const router = express.Router();
 
@@ -11,6 +11,7 @@ router.route('/')
 router.route('/:id')
     .get(downloadFile)
     .delete(deleteDocument)
+    .patch(updateDocument)
 
 
 
