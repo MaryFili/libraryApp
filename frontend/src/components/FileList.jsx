@@ -163,7 +163,7 @@ export default function FileList({ refreshKey, setRefreshKey }) {
                         <div className='Info Container'>
                             <p>Uploaded at {new Date(doc.createdAt).toDateString()}</p>
                             <p>Downloads: {doc.downloadCount}</p>
-                            {fileLink && <p>Your file is available at the following address: <a href={fileLink}>{fileLink}</a></p>}
+                            {fileLink && <p>Your file is available at the following address: <a href={fileLink} onClick={() => downloadFile(doc._id, doc.downloadCount)}> {fileLink}</a></p>}
                         </div>
                     </li>
                 ))}

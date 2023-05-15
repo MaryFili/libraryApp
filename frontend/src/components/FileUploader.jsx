@@ -88,7 +88,7 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
 
                 </div>
                 {fileNames.length > 0 && <div className='filesSelected'>
-                    {/* <h2>Selected Files:</h2> */}
+
                     <p className="fileNames">{fileNames.join(', ')}</p>
                 </div>}
                 <button type="submit" value="Upload" className='upload-btn'>
@@ -112,10 +112,6 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             <p className="main">Supported Files</p>
             <p className="fileInfo">.txt, .doc, .docx, .pdf, .jpg, .png, .xls, .xlsx</p>
             {errorMessage && <p className='errorMessage'>{errorMessage}</p>}
-            {/* {fileNames.length > 0 && <div className='filesSelected'>
-                <h2>Selected Files:</h2>
-                <p className="fileNames">{fileNames.join(', ')}</p>
-            </div>} */}
 
         </div>
 
