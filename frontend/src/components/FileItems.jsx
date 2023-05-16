@@ -4,7 +4,7 @@ import './FileItems.scss';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDownload, faShare } from '@fortawesome/free-solid-svg-icons';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import PdfPreview from './Previews/PdfPreview';
 import WordPreview from './Previews/WordPreview';
@@ -12,6 +12,7 @@ import ExcelPreview from './Previews/ExcelPreview';
 import TextPreview from './Previews/TextPreview';
 import ImagePreview from './Previews/ImagePreview';
 import FileLink from './FileLink';
+import FileDownload from './FileDownload';
 
 
 
@@ -34,55 +35,6 @@ export default function FileItems({ refreshKey, setRefreshKey }) {
         getAllDocs();
     }, [refreshKey])
 
-
-    const downloadFile = async (id, downloadCount) => {
-        try {
-            // const response = await axios.get(
-            //     `https://librarybe.onrender.com/documents/${id}`,
-            //     { responseType: 'blob' }
-            // );
-
-            const response = await axios.get(
-                `http://localhost:5000/documents/${id}`,
-                { responseType: 'blob' }
-            );
-
-            const blob = new Blob([response.data], { type: response.data.type });
-            const link = document.createElement('a');
-            link.href = window.URL.createObjectURL(blob);
-
-            let filename = response.headers['content-disposition'].split('filename=')[1];
-            //removes any quotes around the filename and any whitespace or slashes
-            filename = filename.replace(/^"+|"+$/g, '').replace(/[\s/\\]/g, '');
-            //decodes any URL-encoded characters in the filename
-            link.download = decodeURIComponent(filename);
-            link.click()
-
-            await axios.patch(`http://localhost:5000/documents/${id}`, { downloadCount: downloadCount + 1 });
-            setRefreshKey(refreshKey + 1);
-
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
-
-    // const getFileLink = (id, expiresInMinutes) => {
-
-    //     const url = `http://localhost:5000/documents/${id}`;
-
-    //     // const url = `https://librarybe.onrender.com/documents/${id}`;
-
-
-    //     //the link will be visible only for the specified amount of minutes
-    //     setFileLink(url);
-
-    //     const linkExpirationTimer = setTimeout(() => {
-    //         setFileLink('');
-    //     }, expiresInMinutes * 60 * 1000);
-
-    //     return linkExpirationTimer;
-    // };
 
     return (
         <>
@@ -121,7 +73,7 @@ export default function FileItems({ refreshKey, setRefreshKey }) {
                     </div>
 
                     <div className='shareIcons'>
-                        <i> <FontAwesomeIcon className='sendIcon' onClick={() => downloadFile(doc._id, doc.downloadCount)} icon={faDownload} /></i>
+                        <FileDownload fileId={doc._id} fileDownloadCount={doc.downloadCount} setRefreshKey={setRefreshKey} refreshKey={refreshKey} />
                         <FileLink fileId={doc._id} />
                     </div>
 
