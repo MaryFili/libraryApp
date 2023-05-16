@@ -1,0 +1,101 @@
+.listItemContainer {
+    min-width: 350px;
+    margin-top: 2em;
+    background: #e3eff3;
+    width: 100%;
+    padding: 2em;
+    list-style: none;
+    display: flex;
+    // flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2em;
+    border-radius: 15px;
+    box-shadow: -5px -5px 17px #d7d7d7,
+        5px 5px 17px #e9e9e9;
+
+    .shareIcons {
+        display: flex;
+        gap: 3em;
+        padding: 1em;
+
+        i {
+            font-size: 23px;
+            cursor: pointer;
+            color: black
+        }
+    }
+
+    .fileContainer {
+        display: flex;
+        gap: 1em;
+        padding: 1em;
+        // justify-content: center;
+        align-items: center;
+
+
+        .previewContainer {
+            display: flex;
+            align-items: center;
+
+            gap: 2em;
+
+            .fileIcon {
+                font-size: 30px;
+                color: #35b8b1;
+
+            }
+        }
+
+        .react-pdf__Page__textContent {
+            top: 0 !important;
+            left: 0 !important;
+            transform: none !important;
+        }
+
+        h4 {
+            font-size: 1.3em;
+            color: #212427;
+
+
+        }
+    }
+
+
+    .InfoContainer {
+        display: flex;
+        flex-direction: column;
+
+
+        p {
+            display: inline;
+            font-size: .8em;
+            color: #212427;
+        }
+
+    }
+
+
+
+
+    @media screen and (max-width: 1000px) {
+        flex-direction: column;
+
+        .shareIcons {
+            flex-direction: column;
+            align-items: center;
+            gap: 1em;
+        }
+
+        .fileContainer {
+            flex-direction: column;
+            align-items: center;
+
+            .previewContainer {
+                flex-direction: column;
+                align-items: center;
+                gap: 1em;
+            }
+        }
+    }
+}

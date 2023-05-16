@@ -35,6 +35,7 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             // Update the fileNames state with the names of the selected files
             const names = fileList.map(file => file.name);
             setFileNames(names);
+
         } catch (err) {
             setErrorMessage(err.message)
             console.log(errorMessage);
@@ -46,7 +47,6 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
         e.preventDefault();
 
         try {
-
             setIsUploading(true);
             const fd = new FormData();
 
@@ -123,7 +123,4 @@ FileUpload.propTypes = {
     setDocs: PropTypes.func.isRequired,
     refreshKey: PropTypes.number.isRequired,
     setRefreshKey: PropTypes.func.isRequired
-
-
-
 };
