@@ -112,7 +112,6 @@ export default function FileUpload({ docs, setDocs, refreshKey, setRefreshKey })
             <p className="fileInfo">.txt, .doc, .docx, .pdf, .jpg, .png, .xls, .xlsx</p>
             {errorMessage && <p className='errorMessage'>{errorMessage}</p>}
         </div>
-
     )
 
 }
